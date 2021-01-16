@@ -44,8 +44,16 @@ def correlation2d(input:np.ndarray, kernel:np.ndarray, stride:int = 1, padding:i
     # for a good overview of this concept see publication:
     # https://www.researchgate.net/publication/330315719_A_Uniform_Architecture_Design_for_Accelerating_2D_and_3D_CNNs_on_FPGAs
 
+    # get relative indices of the kernel's neighbourhood (row major order)
+    i = np.tile(np.repeat(np.arange(Wk), Hk), Ck)  # row index
+    j = np.tile(np.arange(Hk), Ck*Wk) # column index
+    k = np.repeat(np.arange(Ck), Wk*Hk) # depth index (channels)
+    # neigh_index --> [k, i, j] # indexing as BxCxHxW
+
+    # using the top left corner of the mask as the origin of the kernel, get the locations where the mask will be placed
+
     transformed_input = np.zeros((B, (Ck*Hk*Wk), H*W))
-    
+
 
 # def correlation2d(inputs:np.ndarray, kernel:np.ndarray, **kwargs) -> np.ndarray:
 #     '''
