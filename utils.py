@@ -1,5 +1,29 @@
 import numpy as np
-import scipy as sp
+from matplotlib import pyplot as plt
+
+
+def show_tensor(tensor):
+    plt.imshow(tensor.transpose(1, 2, 0))
+    plt.title("original image")
+    plt.axis("off")
+    plt.show()
+
+
+def show_batch_of_tensors(batch, ncol=5):
+    B, C, H, W = batch.shape
+    extra = 0
+    if not B % ncol == 0:
+        Warning('inconsistent dimensions: {} samples to format using {} columns. ugly output'.format(B, ncol))
+        extra+=1
+
+    fig, axs = plt.subplots(int(B / ncol) + extra, ncol)
+
+    for (tensor, ax) in zip(batch, axs.ravel()[:B]):
+        ax.imshow(tensor.transpose(1, 2, 0))
+        ax.axis("off")
+
+    plt.tight_layout()
+    plt.show()
 
 def correlation2d(input:np.ndarray, kernel:np.ndarray, bias:np.ndarray, stride:int = 1, padding:int = 0) -> np.ndarray:
     '''
@@ -57,7 +81,6 @@ def correlation2d(input:np.ndarray, kernel:np.ndarray, bias:np.ndarray, stride:i
     J = stride*np.tile(np.arange(Wout), Hout)
 
     # get the final indeces at each position I,J,K
-
     ii = i.reshape(-1, 1) + I.reshape(1, -1)
     jj = j.reshape(-1, 1) + J.reshape(1, -1)
     kk = k.reshape(-1, 1)
@@ -70,7 +93,6 @@ def correlation2d(input:np.ndarray, kernel:np.ndarray, bias:np.ndarray, stride:i
     # matrix multiplication operator @ will take care of broadcasting the matrix multiplication along the B dimension,
     # however we need to take care of broadcasting the bias in a Nkx(Hout*Wout) matrix, where each row has the bias of
     # the corresponding filter
-
     b = np.ones((Nk, Hout*Wout))*np.expand_dims(bias, axis=1)
     out = kernel @ transformed_input + b
 
@@ -79,9 +101,12 @@ def correlation2d(input:np.ndarray, kernel:np.ndarray, bias:np.ndarray, stride:i
 
     return out
 
-def _relu(input):
+def relu(input):
     mask = input <= 0
     input[mask] = 0
     # grad = np.ones_like(input)
     # grad[mask] = 0
     return input
+
+def sigmoid(input):
+    return 1/(1+np.exp(-input))

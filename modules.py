@@ -7,6 +7,8 @@ class Param():
             self.grad = np.zeros_like(data)
 
     def set_data(self, data:np.ndarray, store_grad:bool = False):
+        if not isinstance(data, np.ndarray):
+            data = np.array(data)
         self.data = data
         if store_grad:
             self.grad = np.zeros_like(data)
