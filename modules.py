@@ -67,10 +67,7 @@ class Conv2D(Module):
         self.ks, self.stride, self.pad = kernel_size, stride, padding
 
     def forward(self, input:np.ndarray) -> np.ndarray:
-
         # convolve input
-        if self.bias.data is not None:
-            return correlation2d(input, self.weights.data, stride=self.stride, padding=self.pad) + self.bias.data
-        else:
-            return correlation2d(input, self.weights.data,stride=self.stride, padding=self.pad)
+        return correlation2d(input, self.weights.data, self.bias.data, stride=self.stride, padding=self.pad)
+
 
