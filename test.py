@@ -10,12 +10,14 @@ batch = np.array([img,]*2)
 
 utils.show_batch_of_tensors(batch, ncol=1)
 
-out = conv_layer(conv_layer(batch))
-
-out/=out.max()
-print(conv_layer.weights.data)
 print("input")
-print(batch)
+print(batch.shape)
+
+out = conv_layer(batch)
+out/=out.max()
+
+print("weights")
+print(conv_layer.weights.data)
 print("output")
 print(out)
 utils.show_batch_of_tensors(out, ncol=1)
