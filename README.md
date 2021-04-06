@@ -9,7 +9,7 @@ May continue this in the future with implementations of further models.
 1. clone repo and create virtual environment (Python 3.8.2)
 ```bash
 git clone git@gitlab.com:cesare.magnetti/deeplearningfromscratch.git <your_working_directory>
-python -m venv env
+python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 ```
